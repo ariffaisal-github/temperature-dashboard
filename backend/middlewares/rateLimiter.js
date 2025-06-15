@@ -4,6 +4,10 @@ import Redis from "ioredis";
 
 const redisClient = new Redis();
 
+redisClient.on("error", (err) => {
+  console.error("Redis error:", err);
+});
+
 export const apiRateLimiter = rateLimit({
   windowMs: 1000, // 1 second window
   max: 100, // Limit each IP to 100 requests per windowMs

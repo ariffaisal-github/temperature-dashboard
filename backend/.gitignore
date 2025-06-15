@@ -12,6 +12,12 @@ yarn-error.log*
 # OS-specific
 .DS_Store
 
+dump.rdb
+appendonly.aof
+*.rdb
+*.aof
+
+
 # Optional build artifacts (if any in future)
 dist/
 build/
