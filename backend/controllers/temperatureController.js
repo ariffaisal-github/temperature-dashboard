@@ -14,6 +14,7 @@ export const getTemperature = (req, res, next) => {
     if (!data.temperature) {
       throw new CustomError("Temperature data missing", 422);
     }
+    console.log(`${process.pid} handled GET /api/temperature request`);
 
     res.status(200).json({
       temperature: data.temperature,
