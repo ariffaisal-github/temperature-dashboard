@@ -101,6 +101,9 @@ Returns current temperature data. JWT authentication required.
 
 This project uses k6 to simulate high traffic and verify that rate limiting is enforced correctly (100 requests per second per user).
 
+- Simulates 200 virtual users sending >100 requests/sec.
+- Uses **Redis** to enforce a global limit of 100 requests/sec.
+
 ### 🛠️ Prerequisite:
 
 Install k6 CLI globally:
