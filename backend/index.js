@@ -1,6 +1,7 @@
 import express from "express";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import temperatureRoutes from "./routes/temperatureRoute.js";
+import temperatureRoutes from "./routes/temperatureRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,6 +10,7 @@ app.use(express.json());
 
 // Temperature API routes
 app.use("/api/temperature", temperatureRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Temperature Dashboard Backend is running!");
