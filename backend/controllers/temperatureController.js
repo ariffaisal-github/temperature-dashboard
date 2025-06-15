@@ -1,6 +1,12 @@
 import { CustomError } from "../utils/CustomError.js";
 import { generateTemperatureData } from "../services/temperatureService.js";
 
+/**
+ * Get the current temperature
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 export const getTemperature = (req, res, next) => {
   try {
     const data = generateTemperatureData();

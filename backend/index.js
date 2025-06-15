@@ -21,5 +21,7 @@ app.get("/", (req, res) => {
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Backend Server is running on http://localhost:${PORT}`);
+  console.log(
+    `✅ Worker ${process.pid} started. Server running on http://localhost:${PORT}`
+  );
 });

@@ -2,13 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Temperature Dashboard Backend Server",
-  "main": "index.js",
+  "main": "cluster.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test:rate-limit-test": "cross-env k6 run tests/rate-limit-test.js --summary-export=tests/summary/rate-limit-summary.json"
+    "start": "node cluster.js",
+    "dev": "nodemon cluster.js",
+    "test:rate-limit": "cross-env k6 run tests/rate-limit-test.js --summary-export=tests/summary/rate-limit-summary.json"
   },
   "author": "Arif Faisal",
   "license": "ISC",

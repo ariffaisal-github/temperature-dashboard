@@ -40,6 +40,7 @@ pnpm run dev
 Authenticate a user and receive a JWT token.
 
 - **Request Body**:
+
   ```json
   {
     "email": "test@example.com",
@@ -48,6 +49,7 @@ Authenticate a user and receive a JWT token.
   ```
 
 - **Success Response**:
+
   ```json
   {
     "success": true,
@@ -70,11 +72,13 @@ Authenticate a user and receive a JWT token.
 Returns current temperature data. JWT authentication required.
 
 - **Headers**:
+
   ```
   Authorization: Bearer <JWT_TOKEN>
   ```
 
 - **Success Response**:
+
   ```json
   {
     "temperature": 25,
@@ -121,10 +125,11 @@ curl -X POST http://localhost:3000/api/auth/login \
 3. Run the test with your token (via CLI):
 
 ```bash
-npm run test:rate-limit-test -- --env TOKEN=<PASTE_YOUR_JWT_HERE>
+npm run test:rate-limit -- --env TOKEN=<PASTE_YOUR_JWT_HERE>
 ```
 
 This runs k6 with:
+
 - 200 Virtual Users
 - 1-second duration
 - JSON summary output at `tests/summary/rate-limit-summary.json`
@@ -137,6 +142,7 @@ tests/summary/rate-limit-summary.json
 ```
 
 ### 📈 What to Expect:
+
 - The rate limiter is working as expected, effectively limiting requests to 100 per second per user
 - Initial requests will return `200 OK` while within the rate limit
 - Once the limit is reached, subsequent requests will return `429 Too Many Requests`
