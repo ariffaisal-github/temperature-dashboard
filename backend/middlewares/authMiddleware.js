@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { CustomError } from "../utils/CustomError.js";
+import { isBlacklisted } from "../utils/tokenBlacklist.js";
 
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -7,6 +8,10 @@ export const authenticateToken = (req, res, next) => {
 
   if (!token) {
     throw new CustomError("Authorization token missing", 401);
+  }
+
+  if (isBlacklisted(token)) {
+    throw new CustomError("Token has been logged out", 403);
   }
 
   try {
