@@ -90,3 +90,55 @@ Returns current temperature data. JWT authentication required.
     "error": "Unauthorized"
   }
   ```
+
+## 🧪 Performance Testing
+
+### ✅ Rate Limit Test (using k6)
+
+This project uses k6 to simulate high traffic and verify that rate limiting is enforced correctly (100 requests per second per user).
+
+### 🛠️ Prerequisite:
+
+Install k6 CLI globally:
+
+```bash
+choco install k6        # For Windows (using Chocolatey)
+brew install k6         # For macOS (Homebrew)
+```
+
+### 🔁 How to Run the Rate Limit Test:
+
+1. First, login to get your JWT token:
+
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"123456"}'
+```
+
+2. Copy the token from the response.
+
+3. Run the test with your token (via CLI):
+
+```bash
+npm run test:rate-limit-test -- --env TOKEN=<PASTE_YOUR_JWT_HERE>
+```
+
+This runs k6 with:
+- 200 Virtual Users
+- 1-second duration
+- JSON summary output at `tests/summary/rate-limit-summary.json`
+
+### 📂 Output Example:
+
+```
+Summary stored at:
+tests/summary/rate-limit-summary.json
+```
+
+### 📈 What to Expect:
+- The rate limiter is working as expected, effectively limiting requests to 100 per second per user
+- Initial requests will return `200 OK` while within the rate limit
+- Once the limit is reached, subsequent requests will return `429 Too Many Requests`
+- The distribution of successful vs rate-limited responses confirms the rate limiter is functioning correctly
+- Run logs and exported summary show validation of the system under pressure and rate limiting behavior
