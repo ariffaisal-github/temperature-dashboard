@@ -31,6 +31,28 @@ pnpm install
 pnpm run dev
 ```
 
+### Redis Server
+
+#### Running Redis via Docker
+
+Make sure Docker is running. Then:
+
+```bash
+docker run --name redis-server -p 6379:6379 -d redis
+```
+
+To stop:
+
+```bash
+docker stop redis-server
+```
+
+To restart:
+
+```bash
+docker start redis-server
+```
+
 ## 📚 API Documentation
 
 ### 🔐 Authentication
