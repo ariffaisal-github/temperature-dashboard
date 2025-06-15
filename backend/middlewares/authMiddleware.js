@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
+import { CustomError } from "../utils/CustomError.js";
 
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
   if (!token) {
-    return res
-      .status(401)
-      .json({ success: false, error: "Access denied. Token missing." });
+    throw new CustomError("Authorization token missing", 401);
   }
 
   try {
@@ -18,8 +17,6 @@ export const authenticateToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return res
-      .status(403)
-      .json({ success: false, error: "Invalid or expired token." });
+    next(new CustomError("Invalid or expired token", 403));
   }
 };

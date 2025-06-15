@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { CustomError } from "../utils/CustomError.js";
 
 const dummyUser = {
   id: 1,
@@ -6,20 +7,26 @@ const dummyUser = {
   password: "123456",
 };
 
-export const login = (req, res) => {
-  const { email, password } = req.body;
+export const login = (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-  if (email !== dummyUser.email || password !== dummyUser.password) {
-    return res
-      .status(401)
-      .json({ success: false, error: "Invalid credentials" });
+    if (!email || !password) {
+      throw new CustomError("Email and password are required", 400);
+    }
+
+    if (email !== dummyUser.email || password !== dummyUser.password) {
+      throw new CustomError("Invalid credentials", 401);
+    }
+
+    const token = jwt.sign(
+      { id: dummyUser.id, email: dummyUser.email },
+      process.env.JWT_SECRET || "jwt_secret_key",
+      { expiresIn: "1h" }
+    );
+
+    res.json({ success: true, token });
+  } catch (err) {
+    next(err); // Pass to centralized error handler
   }
-
-  const token = jwt.sign(
-    { id: dummyUser.id, email: dummyUser.email },
-    process.env.JWT_SECRET || "jwt_secret_key",
-    { expiresIn: "1h" }
-  );
-
-  return res.json({ success: true, token });
 };
