@@ -7,17 +7,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test:rate-limit-test": "cross-env k6 run tests/rate-limit-test.js --summary-export=tests/summary/rate-limit-summary.json"
   },
   "author": "Arif Faisal",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.10"
   }
 }
