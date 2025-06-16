@@ -8,7 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node cluster.js",
     "dev": "nodemon cluster.js",
-    "test:rate-limit": "cross-env k6 run tests/rate-limit-test.js --summary-export=tests/summary/rate-limit-summary.json"
+    "test:rate-limit": "cross-env k6 run tests/rate-limit/rate-limit-test.js --summary-export=tests/summary/rate-limit-summary.json",
+    "test:load": "cross-env k6 run tests/load/load-test.js --summary-export=tests/summary/load-test-summary.json",
+    "tokens:generate": "node tests/load/generate-tokens-to-redis.js",
+    "tokens:export": "node tests/load/redis-to-json.js"
   },
   "author": "Arif Faisal",
   "license": "ISC",

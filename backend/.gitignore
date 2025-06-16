@@ -17,6 +17,7 @@ appendonly.aof
 *.rdb
 *.aof
 
+tests/load/tokens.json
 
 # Optional build artifacts (if any in future)
 dist/

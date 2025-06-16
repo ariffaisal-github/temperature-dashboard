@@ -7,11 +7,11 @@ export const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
   if (!token) {
-    throw new CustomError("Authorization token missing", 401);
+    return next(new CustomError("Authorization token missing", 401));
   }
 
   if (isBlacklisted(token)) {
-    throw new CustomError("Token has been logged out", 403);
+    return next(new CustomError("Token has been logged out", 403));
   }
 
   try {
@@ -22,6 +22,6 @@ export const authenticateToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    next(new CustomError("Invalid or expired token", 403));
+    return next(new CustomError("Invalid or expired token", 403));
   }
 };

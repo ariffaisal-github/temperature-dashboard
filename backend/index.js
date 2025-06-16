@@ -1,16 +1,19 @@
 import express from "express";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import { apiRateLimiter } from "./middlewares/rateLimiter.js";
 import temperatureRoutes from "./routes/temperatureRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
+app.use(express.json());
+
+import dotenv from "dotenv";
+dotenv.config({
+  path: ".env",
+});
+
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(apiRateLimiter);
-
-// Temperature API routes
+// Temperature API routes with authentication and rate limiting
 app.use("/api/temperature", temperatureRoutes);
 app.use("/api/auth", authRoutes);
 

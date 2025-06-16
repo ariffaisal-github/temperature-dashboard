@@ -173,3 +173,19 @@ tests/summary/rate-limit-summary.json
 - Once the limit is reached, subsequent requests will return `429 Too Many Requests`
 - The distribution of successful vs rate-limited responses confirms the rate limiter is functioning correctly
 - Run logs and exported summary show validation of the system under pressure and rate limiting behavior
+
+### 🔥 Load Test
+
+To run a comprehensive load test:
+
+```bash
+npm run test:load -- --env TOKEN=<PASTE_YOUR_JWT_HERE>
+```
+
+This will simulate a realistic load on your application, testing:
+- Concurrent user handling
+- Response times under load
+- System stability and resource usage
+- Error rates across different load levels
+
+Make sure to replace `<PASTE_YOUR_JWT_HERE>` with a valid JWT token obtained from the authentication endpoint.

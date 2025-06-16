@@ -10,10 +10,13 @@ redisClient.on("error", (err) => {
 
 export const apiRateLimiter = rateLimit({
   windowMs: 1000, // 1 second window
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 100, // Limit each req.user?.id to 100 requests per windowMs
   store: new RedisStore({
     sendCommand: (...args) => redisClient.call(...args),
   }),
+  keyGenerator: (req, res) => {
+    return req.user?.id || req.ip; // Fallback to IP if user ID is not available
+  },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   message: {
