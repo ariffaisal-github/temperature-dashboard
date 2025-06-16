@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // === CONFIGURATION ===
-const redis = new Redis(); // default localhost:6379
+const redis = new Redis();
 const secret = process.env.JWT_SECRET || "your_jwt_secret";
 const numberOfTokens = 1000;
 const keyPrefix = "loadtest:token:";

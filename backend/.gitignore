@@ -18,7 +18,12 @@ appendonly.aof
 *.aof
 
 tests/load/tokens.json
+tests/rate-limit/token.json
+.clinic
 
 # Optional build artifacts (if any in future)
 dist/
 build/
+
+#docker
+.dockerignore

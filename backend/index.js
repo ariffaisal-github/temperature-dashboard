@@ -11,7 +11,7 @@ dotenv.config({
   path: ".env",
 });
 
-const PORT = process.env.PORT || 3000;
+const NODE_PORT = process.env.NODE_PORT || 3000;
 
 // Temperature API routes with authentication and rate limiting
 app.use("/api/temperature", temperatureRoutes);
@@ -23,8 +23,8 @@ app.get("/", (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+app.listen(NODE_PORT, () => {
   console.log(
-    `✅ Worker ${process.pid} started. Server running on http://localhost:${PORT}`
+    `✅ Worker ${process.pid} started. Server running on http://localhost:${NODE_PORT}`
   );
 });

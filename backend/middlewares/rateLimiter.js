@@ -2,7 +2,10 @@ import rateLimit from "express-rate-limit";
 import RedisStore from "rate-limit-redis";
 import Redis from "ioredis";
 
-const redisClient = new Redis();
+const redisClient = new Redis({
+  host: process.env.REDIS_HOST || "localhost",
+  port: process.env.REDIS_PORT || 6379,
+});
 
 redisClient.on("error", (err) => {
   console.error("Redis error:", err);

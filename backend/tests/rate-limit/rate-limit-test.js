@@ -6,7 +6,7 @@ import { SharedArray } from "k6/data";
 const jwtToken = new SharedArray("tokens", () =>
   JSON.parse(open("./token.json"))
 );
-const PORT = __ENV.PORT || 3000;
+const NGINX_PORT = 8080; //__ENV.NGINX_PORT || 8080;
 
 export const options = {
   vus: 200, // Number of virtual users
@@ -14,7 +14,7 @@ export const options = {
 };
 
 export default function () {
-  const res = http.get(`http://localhost:${PORT}/api/temperature`, {
+  const res = http.get(`http://localhost:${NGINX_PORT}/api/temperature`, {
     headers: {
       Authorization: `Bearer ${jwtToken}`,
     },

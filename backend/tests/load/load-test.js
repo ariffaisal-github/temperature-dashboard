@@ -13,8 +13,8 @@ export const options = {
     { duration: "10s", target: 0 },
   ],
 };
-
-const BASE_URL = "http://localhost:3000/api/temperature";
+const NGINX_PORT = 8080;
+const BASE_URL = `http://localhost:${NGINX_PORT}/api/temperature`;
 
 export default function () {
   const token = tokens[(__VU - 1) % tokens.length];
