@@ -1,8 +1,11 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
+import { SharedArray } from "k6/data";
 
 // Read token from CLI arg
-const jwtToken = __ENV.TOKEN;
+const jwtToken = new SharedArray("tokens", () =>
+  JSON.parse(open("./token.json"))
+);
 const PORT = __ENV.PORT || 3000;
 
 export const options = {
@@ -19,7 +22,6 @@ export default function () {
 
   check(res, {
     "Status is either 200 or 429": (r) => r.status === 200 || r.status === 429,
+    "Response time < 500ms": (r) => r.timings.duration < 500,
   });
-
-  sleep(0.01);
 }
