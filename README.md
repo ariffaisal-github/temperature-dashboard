@@ -14,6 +14,39 @@ A real-time, high-performance temperature monitoring dashboard built with **Reac
 
 ## 🚀 Running the Project
 
+### Redis Server
+
+#### Running Redis via Docker
+
+Make sure Docker is running. Then:
+
+```bash
+docker run --name redis-server -p 6379:6379 -d redis
+```
+
+Or if you prefer to run Redis directly on your machine, ensure you have Redis installed and then start it with:
+
+```bash
+redis-server
+```
+
+To stop:
+
+```bash
+docker stop redis-server
+```
+
+```bash
+redis-cli shutdown
+```
+
+````bash
+To restart:
+
+```bash
+docker start redis-server
+````
+
 ### Backend
 
 ```bash
@@ -29,28 +62,6 @@ cd frontend
 npm install -g pnpm
 pnpm install
 pnpm run dev
-```
-
-### Redis Server
-
-#### Running Redis via Docker
-
-Make sure Docker is running. Then:
-
-```bash
-docker run --name redis-server -p 6379:6379 -d redis
-```
-
-To stop:
-
-```bash
-docker stop redis-server
-```
-
-To restart:
-
-```bash
-docker start redis-server
 ```
 
 ## 📚 API Documentation
@@ -137,20 +148,13 @@ brew install k6         # For macOS (Homebrew)
 
 ### 🔁 How to Run the Rate Limit Test:
 
-1. First, login to get your JWT token:
+Run the test via CLI:
 
 ```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"123456"}'
-```
+npm run tokens:generate
+npm run tokens:export
+npm run test:rate-limit
 
-2. Copy the token from the response.
-
-3. Run the test with your token (via CLI):
-
-```bash
-npm run test:rate-limit -- --env TOKEN=<PASTE_YOUR_JWT_HERE>
 ```
 
 This runs k6 with:
@@ -162,8 +166,10 @@ This runs k6 with:
 ### 📂 Output Example:
 
 ```
+
 Summary stored at:
 tests/summary/rate-limit-summary.json
+
 ```
 
 ### 📈 What to Expect:
@@ -179,13 +185,28 @@ tests/summary/rate-limit-summary.json
 To run a comprehensive load test:
 
 ```bash
-npm run test:load -- --env TOKEN=<PASTE_YOUR_JWT_HERE>
+npm run tokens:generate
+npm run tokens:export
+npm run test:load
 ```
 
 This will simulate a realistic load on your application, testing:
+
 - Concurrent user handling
 - Response times under load
 - System stability and resource usage
 - Error rates across different load levels
 
-Make sure to replace `<PASTE_YOUR_JWT_HERE>` with a valid JWT token obtained from the authentication endpoint.
+### 📂 Output Example:
+
+```
+Summary stored at:
+tests/summary/load-test-summary.json
+```
+
+### 📈 What to Expect:
+
+- The system should handle the load without crashing
+- Response times should remain within acceptable limits
+- Error rates should be low, ideally below 1%
+- The load test summary will provide insights into performance bottlenecks and areas for optimization
