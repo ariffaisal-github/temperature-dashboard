@@ -1,20 +1,21 @@
 import http from "k6/http";
-import { check, sleep } from "k6";
+import { check } from "k6";
 import { SharedArray } from "k6/data";
 
-// Read token from CLI arg
 const jwtToken = new SharedArray("tokens", () =>
   JSON.parse(open("./token.json"))
 );
-const NGINX_PORT = 8080; //__ENV.NGINX_PORT || 8080;
+
+// Use ENV variable or fallback to host.docker.internal
+const BASE_URL = __ENV.BASE_URL || "http://host.docker.internal:8080";
 
 export const options = {
-  vus: 200, // Number of virtual users
-  duration: "1s", // Duration of the test
+  vus: 200,
+  duration: "1s",
 };
 
 export default function () {
-  const res = http.get(`http://localhost:${NGINX_PORT}/api/temperature`, {
+  const res = http.get(`${BASE_URL}/api/temperature`, {
     headers: {
       Authorization: `Bearer ${jwtToken}`,
     },
