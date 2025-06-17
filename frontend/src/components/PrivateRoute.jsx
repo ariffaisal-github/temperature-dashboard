@@ -22,7 +22,7 @@ const PrivateRoute = ({ children }) => {
         if (!res.ok) throw new Error("Unauthorized");
 
         setIsAuthenticated(true);
-      } catch (err) {
+      } catch {
         setIsAuthenticated(false);
       }
     };

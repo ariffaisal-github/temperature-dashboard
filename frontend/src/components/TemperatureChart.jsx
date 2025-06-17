@@ -1,9 +1,9 @@
+import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
 const TemperatureChart = ({ data, unit }) => {
   const temperatures = data.map((d) => d.temperature);
-  const timestamps = data.map((d) => new Date(d.timestamp).getTime());
 
   const options = {
     title: { text: "Live Temperature Data" },
@@ -17,27 +17,28 @@ const TemperatureChart = ({ data, unit }) => {
         {
           value: Math.max(...temperatures),
           color: "red",
-          dashStyle: "ShortDash",
+          dashStyle: "Dot", // or "Solid", "Dot", "DashDot", "LongDashDot", "LongDashDotDot"
           width: 2,
           label: { text: "Max", align: "right", style: { color: "red" } },
         },
         {
           value: Math.min(...temperatures),
           color: "blue",
-          dashStyle: "ShortDash",
+          dashStyle: "Dot",
           width: 2,
           label: { text: "Min", align: "right", style: { color: "blue" } },
         },
         {
-          value: temperatures.reduce((a, b) => a + b, 0) / temperatures.length,
+          value:
+            temperatures.reduce((sum, val) => sum + val, 0) /
+            temperatures.length,
           color: "green",
-          dashStyle: "ShortDash",
+          dashStyle: "Dot",
           width: 2,
           label: { text: "Avg", align: "right", style: { color: "green" } },
         },
       ],
     },
-    chart: { animation: true },
     series: [
       {
         name: "Temperature",
