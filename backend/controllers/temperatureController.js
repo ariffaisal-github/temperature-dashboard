@@ -1,13 +1,7 @@
 import { CustomError } from "../utils/CustomError.js";
 import { generateTemperatureData } from "../services/temperatureService.js";
-import Redis from "ioredis";
-const redisClient = new Redis({
-  host: process.env.REDIS_HOST || "localhost",
-  port: process.env.REDIS_PORT || 6379,
-});
-redisClient.on("error", (err) => {
-  console.error("Redis error:", err);
-});
+import redisClient from "../utils/redisClient.js";
+const CACHE_TTL_MS = parseInt(process.env.TEMP_CACHE_TTL_MS || "5000", 10); // 5 seconds default
 let memoryCache = null;
 let lastUpdated = 0;
 /**
@@ -21,8 +15,8 @@ export const getTemperature = async (req, res, next) => {
     const now = Date.now();
 
     // Check per-worker in-memory cache first
-    if (memoryCache && now - lastUpdated < 2000) {
-      console.log(`${process.pid} served from memory`);
+    if (memoryCache && now - lastUpdated < CACHE_TTL_MS) {
+      
       return res.status(200).json(memoryCache);
     }
 
@@ -31,7 +25,7 @@ export const getTemperature = async (req, res, next) => {
     if (cached) {
       memoryCache = JSON.parse(cached);
       lastUpdated = now;
-      console.log(`${process.pid} served from redis`);
+      
       return res.status(200).json(memoryCache);
     }
 
@@ -44,10 +38,10 @@ export const getTemperature = async (req, res, next) => {
     memoryCache = data;
     lastUpdated = now;
 
-    // Store in Redis with 2-second expiry
-    await redisClient.set("latest_temperature", JSON.stringify(data), "EX", 2);
+    // Store in Redis with 5-second expiry
+    await redisClient.set("latest_temperature", JSON.stringify(data), "EX", CACHE_TTL_MS / 1000);
 
-    console.log(`${process.pid} generated fresh data`);
+    
     res.status(200).json(data);
   } catch (err) {
     next(err);
@@ -62,7 +56,7 @@ export const getTemperature = async (req, res, next) => {
 //     if (!data.temperature) {
 //       throw new CustomError("Temperature data missing", 422);
 //     }
-//     console.log(`${process.pid} handled GET /api/temperature request`);
+
 
 //     res.status(200).json({
 //       temperature: data.temperature,

@@ -12,7 +12,12 @@ dotenv.config({
 });
 
 import compression from "compression";
-app.use(compression());
+// Compress only for responses larger than 1 KB to reduce CPU overhead on small JSON payloads
+app.use(
+  compression({
+    threshold: 1024, // bytes
+  })
+);
 
 const NODE_PORT = process.env.NODE_PORT || 3000;
 
