@@ -14,6 +14,44 @@ A real-time, high-performance temperature monitoring dashboard built with **Reac
 
 ## 🚀 Running the Project
 
+### Using Docker Compose (Recommended)
+
+To run the entire application stack using Docker Compose, ensure you have Docker and Docker Compose installed. Then, execute:
+
+```bash
+docker-compose up --build
+```
+
+This command will build the images and start the containers for both the backend, nginx, and Redis server.
+
+For performance testing:
+
+```bash
+cd backend
+npm run tokens:generate
+npm run tokens:export
+npm run test:docker-build # This builds the Docker image for performance testing
+```
+
+Then run the performance tests:
+
+```bash
+npm run rate-limit-test:docker
+npm run load-test:docker
+```
+
+### Manual Setup (Without Docker)
+
+If you prefer to run the project without Docker, follow these steps:
+
+#### Prerequisites
+
+- **Node.js** (v18 or higher)
+- **npm** (Node Package Manager)
+- **Redis** (for rate limiting)
+- **nginx** (for reverse proxy)
+- **k6** (for performance testing)
+
 ### Redis Server
 
 #### Running Redis via Docker

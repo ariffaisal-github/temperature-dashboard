@@ -11,6 +11,9 @@ dotenv.config({
   path: ".env",
 });
 
+import compression from "compression";
+app.use(compression());
+
 const NODE_PORT = process.env.NODE_PORT || 3000;
 
 // Temperature API routes with authentication and rate limiting
