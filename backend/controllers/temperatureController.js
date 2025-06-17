@@ -1,7 +1,7 @@
 import { CustomError } from "../utils/CustomError.js";
 import { generateTemperatureData } from "../services/temperatureService.js";
 import redisClient from "../utils/redisClient.js";
-const CACHE_TTL_MS = parseInt(process.env.TEMP_CACHE_TTL_MS || "5000", 10); // 5 seconds default
+const CACHE_TTL_MS = parseInt(process.env.TEMP_CACHE_TTL_MS || "2000", 10); // 2 seconds default
 let memoryCache = null;
 let lastUpdated = 0;
 /**
@@ -16,7 +16,6 @@ export const getTemperature = async (req, res, next) => {
 
     // Check per-worker in-memory cache first
     if (memoryCache && now - lastUpdated < CACHE_TTL_MS) {
-      
       return res.status(200).json(memoryCache);
     }
 
@@ -25,7 +24,7 @@ export const getTemperature = async (req, res, next) => {
     if (cached) {
       memoryCache = JSON.parse(cached);
       lastUpdated = now;
-      
+
       return res.status(200).json(memoryCache);
     }
 
@@ -38,32 +37,16 @@ export const getTemperature = async (req, res, next) => {
     memoryCache = data;
     lastUpdated = now;
 
-    // Store in Redis with 5-second expiry
-    await redisClient.set("latest_temperature", JSON.stringify(data), "EX", CACHE_TTL_MS / 1000);
+    // Store in Redis with 2-second expiry
+    await redisClient.set(
+      "latest_temperature",
+      JSON.stringify(data),
+      "EX",
+      CACHE_TTL_MS / 1000
+    );
 
-    
     res.status(200).json(data);
   } catch (err) {
     next(err);
   }
 };
-
-// without redis cache
-// export const getTemperature = (req, res, next) => {
-//   try {
-//     const data = generateTemperatureData();
-
-//     if (!data.temperature) {
-//       throw new CustomError("Temperature data missing", 422);
-//     }
-
-
-//     res.status(200).json({
-//       temperature: data.temperature,
-//       unit: "Celsius",
-//       timestamp: data.timestamp,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
