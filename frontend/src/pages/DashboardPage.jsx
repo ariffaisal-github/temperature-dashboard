@@ -41,8 +41,8 @@ const DashboardPage = () => {
   return (
     <>
       <Navbar />
-      <div className="pt-20 min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
-        <div className="w-full max-w-4xl mb-6">
+      <div className="pt-20 min-h-screen flex flex-col items-center bg-gray-50 p-4 space-y-6">
+        <div className="w-full max-w-4xl">
           <TemperatureChart data={history} unit={history[0]?.unit || "°C"} />
         </div>
 

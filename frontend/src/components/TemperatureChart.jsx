@@ -74,7 +74,11 @@ const TemperatureChart = ({ data, unit }) => {
       [1, "#FF0000"], // Red at top (45°C)
     ];
   };
-
+  Highcharts.setOptions({
+    time: {
+      useUTC: false,
+    },
+  });
   const options = useMemo(
     () => ({
       chart: {
@@ -103,7 +107,7 @@ const TemperatureChart = ({ data, unit }) => {
           },
         },
         title: {
-          text: "Time (newest → oldest)",
+          text: "Time",
         },
         min: tickPositions[0],
         max: tickPositions[tickPositions.length - 1],
