@@ -67,11 +67,20 @@ const TemperatureChart = ({ data, unit }) => {
     }
   }, [tickPositions, data]);
 
+  // Function to get color stops for the gradient based on temperature range (vertical gradient)
+  const getGradientStops = () => {
+    return [
+      [0, "#6495ED"], // Blue at bottom (15°C)
+      [1, "#FF0000"], // Red at top (45°C)
+    ];
+  };
+
   const options = useMemo(
     () => ({
       chart: {
         type: "spline",
         animation: true,
+        backgroundColor: "#f9f9f9",
         events: {
           load: function () {
             // Store the chart instance for later use
@@ -115,24 +124,19 @@ const TemperatureChart = ({ data, unit }) => {
       },
       tooltip: {
         headerFormat: "<b>{point.x:%I:%M:%S %p}</b><br/>",
-        pointFormat: "Temperature: {point.y:.1f}°C",
+        pointFormat:
+          "<span style='color:{point.color}'>●</span> Temperature: <b>{point.y:.1f}°C</b>",
+        style: {
+          fontSize: "14px",
+          padding: "10px",
+        },
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        borderWidth: 1,
+        shadow: true,
       },
       plotOptions: {
         spline: {
-          lineWidth: 2,
           connectNulls: true, // Connect line across null values
-          states: {
-            hover: {
-              lineWidth: 3,
-            },
-          },
-          marker: {
-            enabled: true, // Show markers to indicate data points
-            radius: 3,
-            lineWidth: 1,
-            lineColor: "#666",
-            fillColor: "white",
-          },
           pointStart: tickPositions[0],
           pointInterval: INTERVAL_MS,
         },
@@ -140,9 +144,38 @@ const TemperatureChart = ({ data, unit }) => {
       series: [
         {
           name: "Temperature",
+          type: "spline",
           data: chartData,
+          lineWidth: 3,
+          color: {
+            linearGradient: { x1: 0, x2: 0, y1: 1, y2: 0 }, // Vertical gradient (bottom to top)
+            stops: getGradientStops(),
+          },
+          marker: {
+            enabled: true,
+            radius: 4,
+            fillColor: "#fff",
+            lineWidth: 2,
+            lineColor: null, // inherit from series
+            states: {
+              hover: {
+                enabled: true,
+                radius: 6,
+                lineWidth: 2,
+              },
+            },
+          },
           animation: {
             duration: 500,
+          },
+          states: {
+            hover: {
+              lineWidth: 4,
+              halo: {
+                size: 8,
+                opacity: 0.25,
+              },
+            },
           },
         },
       ],
