@@ -47,7 +47,7 @@ const LoginPage = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Enter your email"
+            placeholder="test@example.com"
           />
           <InputField
             label="Password"
@@ -55,7 +55,7 @@ const LoginPage = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Enter your password"
+            placeholder="123456"
           />
           <button
             type="submit"

@@ -24,6 +24,8 @@ docker-compose up --build
 
 This command will build the images and start the containers for both the backend, nginx, and Redis server.
 
+Access the web application at `http://localhost:8080`
+
 For performance testing:
 
 ```bash

@@ -25,5 +25,3 @@ tests/rate-limit/token.json
 dist/
 build/
 
-#docker
-.dockerignore
