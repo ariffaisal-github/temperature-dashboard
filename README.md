@@ -14,15 +14,15 @@ A real-time, high-performance temperature monitoring dashboard built with **Reac
 
 ## 🚀 Running the Project
 
-### Using Docker Compose (Recommended)
+### Using Docker Compose
 
 To run the entire application stack using Docker Compose, ensure you have Docker and Docker Compose installed. Then, execute:
 
 ```bash
-docker-compose up --build
+docker-compose up -d --build
 ```
 
-This command will build the images and start the containers for both the backend, nginx, and Redis server.
+This command builds the images and starts all containers in detached mode (backend, front-end replicas, nginx, and Redis). View logs with `docker-compose logs -f`. 
 
 Access the web application at `http://localhost:8080`
 
@@ -30,78 +30,19 @@ For performance testing:
 
 ```bash
 cd backend
-npm run tokens:generate
-npm run tokens:export
-npm run test:docker-build # This builds the Docker image for performance testing
+npm run tokens:generate            # generate auth tokens in Redis
+npm run tokens:export              # export tokens to JSON
+npm run test:compose:build         # build k6-runner image (only needed once)
 ```
 
-Then run the performance tests:
+Run performance tests inside the same Docker network:
 
 ```bash
-npm run rate-limit-test:docker
-npm run load-test:docker
-```
+# Rate-limit test
+npm run test:compose:rate-limit
 
-### Manual Setup (Without Docker)
-
-If you prefer to run the project without Docker, follow these steps:
-
-#### Prerequisites
-
-- **Node.js** (v18 or higher)
-- **npm** (Node Package Manager)
-- **Redis** (for rate limiting)
-- **nginx** (for reverse proxy)
-- **k6** (for performance testing)
-
-### Redis Server
-
-#### Running Redis via Docker
-
-Make sure Docker is running. Then:
-
-```bash
-docker run --name redis-server -p 6379:6379 -d redis
-```
-
-Or if you prefer to run Redis directly on your machine, ensure you have Redis installed and then start it with:
-
-```bash
-redis-server
-```
-
-To stop:
-
-```bash
-docker stop redis-server
-```
-
-```bash
-redis-cli shutdown
-```
-
-````bash
-To restart:
-
-```bash
-docker start redis-server
-````
-
-### Backend
-
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-### Frontend
-
-```bash
-cd frontend
-npm install -g pnpm
-pnpm install
-pnpm run dev
+# Load test
+npm run test:compose:load
 ```
 
 ## 📚 API Documentation
@@ -177,24 +118,15 @@ This project uses k6 to simulate high traffic and verify that rate limiting is e
 - Simulates 200 virtual users sending >100 requests/sec.
 - Uses **Redis** to enforce a global limit of 100 requests/sec.
 
-### 🛠️ Prerequisite:
+*k6 is executed inside a Docker container, so you **do not** need the k6 CLI on your host machine. If you prefer local runs, install it via Homebrew/Chocolatey.*
 
-Install k6 CLI globally:
-
-```bash
-choco install k6        # For Windows (using Chocolatey)
-brew install k6         # For macOS (Homebrew)
-```
-
-### 🔁 How to Run the Rate Limit Test:
-
-Run the test via CLI:
+### 🔁 How to Run the Rate-Limit Test (Docker)
 
 ```bash
-npm run tokens:generate
+cd backend
+npm run tokens:generate   # ensure Redis has tokens
 npm run tokens:export
-npm run test:rate-limit
-
+npm run test:compose:rate-limit
 ```
 
 This runs k6 with:
@@ -220,14 +152,13 @@ tests/summary/rate-limit-summary.json
 - The distribution of successful vs rate-limited responses confirms the rate limiter is functioning correctly
 - Run logs and exported summary show validation of the system under pressure and rate limiting behavior
 
-### 🔥 Load Test
-
-To run a comprehensive load test:
+### 🔥 Load Test (Docker)
 
 ```bash
+cd backend
 npm run tokens:generate
 npm run tokens:export
-npm run test:load
+npm run test:compose:load
 ```
 
 This will simulate a realistic load on your application, testing:
