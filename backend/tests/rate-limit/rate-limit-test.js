@@ -7,7 +7,8 @@ const jwtToken = new SharedArray("tokens", () =>
 );
 
 // Use ENV variable or fallback to host.docker.internal
-const BASE_URL = __ENV.BASE_URL || "http://host.docker.internal:8080";
+// const BASE_URL = __ENV.BASE_URL || "http://host.docker.internal:8080";
+const BASE_URL = __ENV.BASE_URL || "http://nginx";
 
 export const options = {
   vus: 200,

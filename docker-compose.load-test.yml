@@ -1,0 +1,20 @@
+# This file extends the main docker-compose.yml
+# Run with: docker-compose -f docker-compose.yml -f docker-compose.load-test.yml up -d
+
+services:
+  k6-runner:
+    build:
+      context: ./backend/tests
+      dockerfile: Dockerfile.k6
+    container_name: k6-runner
+    networks:
+      - app_net
+    volumes:
+      - ./backend/tests:/tests
+      - ./backend/tests/summary:/tests/summary
+    environment:
+      - K6_STATSD_ENABLE_TAGS=true
+      - K6_STATSD_ADDR=telegraf:8125
+    # Don't depend on nginx, just make sure it's running before starting tests
+    # The actual dependency is handled by the network
+# No need to define networks here as we're using the one from the main compose file
