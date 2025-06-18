@@ -2,6 +2,38 @@
 
 A real-time, high-performance temperature monitoring dashboard built with **React**, **Node.js**, **Express.js**, and **Highcharts**, designed to handle **millions of concurrent users** efficiently.
 
+## 🛠️ Setup and Local Development
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm and pnpm
+- Docker and Docker Compose (for containerized deployment)
+- Redis (for rate limiting and session management)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ariffaisal-github/temperature-dashboard.git
+   cd temperature-dashboard
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # Install backend dependencies
+   cd backend
+   npm install
+   
+   # Install frontend dependencies
+   cd ../frontend
+   npm install
+   ```
+
+3. **Environment Setup**
+   - Copy `.env.example` to `.env` in both `backend` and `frontend` directories
+   - Update the environment variables as needed
+
+
 ## 🌟 Core Features
 
 - Real-time data visualization using Highcharts
@@ -11,6 +43,27 @@ A real-time, high-performance temperature monitoring dashboard built with **Reac
 - Rate-limiting (100 requests/sec per user)
 - Designed for horizontal scalability (multi-core + proxy-friendly)
 - Structured for future enhancements like clustering, caching, and load balancing
+
+## 🚀 Usage
+
+### Login
+
+1. Open the application in your web browser
+2. Use the following credentials to log in:
+   - **Email:** test@example.com
+   - **Password:** 123456
+
+### Viewing Temperature Data
+
+After logging in, you'll be automatically directed to the dashboard where you can:
+
+- View real-time temperature data in an interactive graph
+- See timestamps for each temperature reading
+- Watch as new data points are added automatically
+
+### Real-time Updates
+
+The temperature graph is updated dynamically by fetching data from the `/api/temperature` endpoint at regular intervals. The graph will automatically update to show the latest temperature readings along with their timestamps.
 
 ## 🚀 Running the Project
 
@@ -26,26 +79,34 @@ This command builds the images and starts all containers in detached mode (backe
 
 Access the web application at `http://localhost:8080`
 
-For performance testing:
+For performance testing, see the [Performance Testing](#-performance-testing) section below.
 
-```bash
-cd backend
-npm run tokens:generate            # generate auth tokens in Redis
-npm run tokens:export              # export tokens to JSON
-npm run test:compose:build         # build k6-runner image (only needed once)
-```
+## 🧩 Design Decisions
 
-Run performance tests inside the same Docker network:
+### Architecture
+- **Frontend**: Built with React and Vite for fast development and hot module replacement
+- **Backend**: Node.js with Express for handling API requests
+- **Authentication**: JWT-based stateless authentication
+- **Rate Limiting**: Redis-backed rate limiting (100 requests/second per user)
+- **Real-time Updates**: Polling mechanism for temperature data updates
 
-```bash
-# Rate-limit test
-npm run test:compose:rate-limit
-
-# Load test
-npm run test:compose:load
-```
+### Key Design Choices
+1. **Modular Architecture**: Separated frontend and backend for better maintainability
+2. **Containerization**: Docker support for consistent development and deployment
+3. **Scalability**: Designed to handle high traffic with rate limiting and efficient data fetching
+4. **Security**: JWT authentication, environment variables for sensitive data
+5. **Testing**: Comprehensive test suite including unit, integration, and performance tests
 
 ## 📚 API Documentation
+
+### Base URL
+`http://localhost:8080/api`
+
+### Authentication
+All endpoints except `/api/auth/login` require a valid JWT token in the `Authorization` header:
+```
+Authorization: Bearer <your-jwt-token>
+```
 
 ### 🔐 Authentication
 
@@ -110,6 +171,13 @@ Returns current temperature data. JWT authentication required.
   ```
 
 ## 🧪 Performance Testing
+The application includes comprehensive performance testing using k6 to ensure it can handle the expected load.
+
+### Test Types
+1. **Unit Tests**: Test individual components in isolation
+2. **Integration Tests**: Test the interaction between components
+3. **Load Tests**: Simulate high traffic to test system performance
+4. **Rate Limit Tests**: Verify rate limiting functionality
 
 ### ✅ Rate Limit Test (using k6)
 
