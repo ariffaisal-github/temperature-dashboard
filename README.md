@@ -194,6 +194,7 @@ This project uses k6 to simulate high traffic and verify that rate limiting is e
 cd backend
 npm run tokens:generate   # ensure Redis has tokens
 npm run tokens:export
+npm run test:compose:build
 npm run test:compose:rate-limit
 ```
 
@@ -226,6 +227,7 @@ tests/summary/rate-limit-summary.json
 cd backend
 npm run tokens:generate
 npm run tokens:export
+npm run test:compose:build
 npm run test:compose:load
 ```
 
